@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Note;
+use App\Logs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -44,8 +45,8 @@ class NotesController extends Controller
         $note = Note::findOrFail($id);
         if(Auth::check() && Auth::user()->id == $note->owner)
         {
+            $this->logIT($note->id, Auth::user()->id, $note->title, $note->text, 'Deleted');
             $note->delete();
-
             return redirect()->route('notes.index');
         }
         else return redirect()->route('notes.index');
@@ -77,6 +78,7 @@ class NotesController extends Controller
             if ($request->has('id'))
             {
                 $note = Note::findOrFail($request->input('id'));
+                $this->logIT($note->id, Auth::user()->id, $note->title, $note->text, 'Edited');
             }
             else
             {
@@ -103,5 +105,16 @@ class NotesController extends Controller
         {
             return 0;
         }
+    }
+
+    public function logIT($id, $owner, $title, $text, $status)
+    {
+        $log = new Logs();
+        $log->note_id = $id;
+        $log->owner_id = $owner;
+        $log->title = $title;
+        $log->text = $text;
+        $log->status = $status;
+        $log->save();
     }
 }

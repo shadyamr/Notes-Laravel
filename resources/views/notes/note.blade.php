@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <div class="card text-white bg-dark">
                 <div class="card-header">{{ $note->title }}</div>
-                <div class="card-body">
+                <div class="card-body bg-secondary">
                     <p class="card-text">{{ $note->text }}</p>
                 </div>
             </div>
