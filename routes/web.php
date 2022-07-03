@@ -1,7 +1,4 @@
 <?php
-
-use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,3 +13,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', 'NotesController@index')->name('notes.index');
+Route::get('/notes', 'NotesController@index')->name('notes.index');
+Route::get('/notes/index', 'NotesController@index')->name('notes.index');
+Route::get('/notes/note/{id}', 'NotesController@note')->name('notes.note');
+Route::get('/notes/delete/{id}', 'NotesController@delete')->name('notes.delete');
+Route::get('/notes/edit/{id}', 'NotesController@edit')->name('notes.edit');
+Route::get('/notes/add', 'NotesController@add')->name('notes.add');
+Route::post('/notes/save', 'NotesController@save')->name('notes.save');
