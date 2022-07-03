@@ -10,36 +10,54 @@ class NotesController extends Controller
 {
     public function index()
     {
-        $notes = Note::paginate(10);
+        if(Auth::check())
+        {
+            $notes = Note::paginate(10);
 
-        return view('notes.index', [
-            'notes' => $notes
-        ]);
+            $user_notes = Note::where('owner', Auth::user()->id)->get();
+
+            return view('notes.index', [
+                'notes' => $notes,
+                'user_notes' => $user_notes
+            ]);
+        }
+        else return redirect()->route('notes.error');
+    }
+
+    public function error()
+    {
+        return view('notes.error');
     }
 
     public function note($id)
     {
         $note = Note::findOrFail($id);
         
-        return view('notes.note', [
+        if(Auth::check() && Auth::user()->id == $note->owner) return view('notes.note', [
             'note' => $note
         ]);
+        else return redirect()->route('notes.index');
     }
 
     public function delete($id)
     {
         $note = Note::findOrFail($id);
-        $note->delete();
+        if(Auth::check() && Auth::user()->id == $note->owner)
+        {
+            $note->delete();
 
-        return redirect()->route('notes.index');
+            return redirect()->route('notes.index');
+        }
+        else return redirect()->route('notes.index');
     }
 
     public function edit($id)
     {
         $note = Note::findOrFail($id);
-        return view('notes.form', [
+        if(Auth::check() && Auth::user()->id == $note->owner )return view('notes.form', [
             'note' => $note
         ]);
+        else return redirect()->route('notes.index');
     }
 
     public function add()
@@ -54,19 +72,32 @@ class NotesController extends Controller
 
     public function save(Request $request)
     {
-        if ($request->has('id'))
+        if(Auth::check())
         {
-            $note = Note::findOrFail($request->input('id'));
+            if ($request->has('id'))
+            {
+                $note = Note::findOrFail($request->input('id'));
+            }
+            else
+            {
+                $note = new Note();
+            }
+            $note->title = $request->input('title');
+            $note->text = $request->input('text');
+            $note->owner = Auth::user()->id;
+            $note->save();
+            
+            return redirect()->route('notes.index');
         }
-        else
+        else return redirect()->route('notes.index');
+    }
+
+    public function checkNotes()
+    {
+        $note = Note::where('owner', Auth::user()->id)->first();
+        if(!$note)
         {
-            $note = new Note();
+            echo "test";
         }
-        $note->title = $request->input('title');
-        $note->text = $request->input('text');
-        $note->owner = Auth::user()->id;
-        $note->save();
-        
-        return redirect()->route('notes.index');
     }
 }

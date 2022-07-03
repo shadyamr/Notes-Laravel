@@ -1,20 +1,19 @@
+<?php use Illuminate\Support\Facades\Auth; ?>
 @extends('layouts.app')
 
 @section('content')
-<?php
-
-use Illuminate\Support\Facades\Auth;
-
-if (Auth::check()) :
-?>
-    <div class="container">
-        <div class="row justify-content-center">
+<div class="container">
+    <div class="row justify-content-center">
+            @if (Auth::check())
             <div class="col-md-12">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Notes</h1>
                     <div class="float-end">
                         <a href="{{ route('notes.add') }}" class="btn btn-sm btn-success">Create</a>
                     </div>
+                </div>
+                <div class="alert alert-info">
+                    <strong>Info:</strong> You don't have any notes! Create one?
                 </div>
                 <table class="table table-hover table-bordered">
                     <thead>
@@ -27,7 +26,7 @@ if (Auth::check()) :
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($notes as $note)
+                        @foreach ($user_notes as $note)
                         <tr>
                             <th scope="row">{{ $note->id }}</th>
                             <td>{{ $note->title }}</td>
@@ -43,23 +42,16 @@ if (Auth::check()) :
                     </tbody>
                 </table>
                 {{ $notes->links() }}
+
             </div>
-        </div>
-    </div>
-<?php
-else :
-?>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="d-flex mb-2 text-center">
-                <div class="alert alert-danger">
-                    <strong>Error!</strong>
-                    You're not using an account! Please login or register.
+            @else
+                <div class="d-flex mb-2 text-center">
+                    <div class="alert alert-danger">
+                        <strong>Error!</strong>
+                        You're not using an account! Please login or register.
+                    </div>
                 </div>
-            </div>
-        </div>
+            @endif
     </div>
-<?php
-endif;
-?>
+</div>
 @endsection

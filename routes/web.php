@@ -18,6 +18,7 @@ Auth::routes();
 
 Route::get('/home', 'NotesController@index')->name('notes.index');
 Route::get('/notes', 'NotesController@index')->name('notes.index');
+Route::get('/error', 'NotesController@error')->name('notes.error');
 Route::get('/notes/index', 'NotesController@index')->name('notes.index');
 Route::get('/notes/note/{id}', 'NotesController@note')->name('notes.note');
 Route::get('/notes/delete/{id}', 'NotesController@delete')->name('notes.delete');
