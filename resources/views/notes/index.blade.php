@@ -1,4 +1,4 @@
-<?php use Illuminate\Support\Facades\Auth; ?>
+<?php use \App\Http\Controllers\NotesController; ?>
 @extends('layouts.app')
 
 @section('content')
@@ -11,9 +11,6 @@
                     <div class="float-end">
                         <a href="{{ route('notes.add') }}" class="btn btn-sm btn-success">Create</a>
                     </div>
-                </div>
-                <div class="alert alert-info">
-                    <strong>Info:</strong> You don't have any notes! Create one?
                 </div>
                 <table class="table table-hover table-bordered">
                     <thead>
@@ -42,7 +39,11 @@
                     </tbody>
                 </table>
                 {{ $notes->links() }}
-
+                @if(NotesController::checkNotes())
+                <div class="alert alert-info">
+                    <strong>Information</strong> — No notes were found.
+                </div>
+                @endif
             </div>
             @else
                 <div class="d-flex mb-2 text-center">

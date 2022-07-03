@@ -92,12 +92,16 @@ class NotesController extends Controller
         else return redirect()->route('notes.index');
     }
 
-    public function checkNotes()
+    public static function checkNotes()
     {
         $note = Note::where('owner', Auth::user()->id)->first();
         if(!$note)
         {
-            echo "test";
+            return 1;
+        }
+        else
+        {
+            return 0;
         }
     }
 }
