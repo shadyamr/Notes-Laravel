@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Note;
-use App\Logs;
+use App\Models\Note;
+use App\Models\Logs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
